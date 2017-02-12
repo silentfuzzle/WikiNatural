@@ -1,0 +1,285 @@
+/* Author: Adam McManigal
+ * Styling controls for the CSS3D elements*/
+
+html {
+    height: 100%;
+}
+
+body {
+    background-color: #000000;
+    margin: 0;
+    font-family: sans-serif;
+    overflow: hidden;
+}
+
+a {
+    color: #ffffff;
+}
+
+.page_container {
+    width: 3005px;
+}
+.text_canvas_obj {
+    max-width: 2900px;
+}
+.size_test p {
+    font-family: sans-serif;
+    font-size: 80px;
+}
+
+.size_test h1, h2 {
+    font-family: sans-serif;
+    font-size: 120px;
+}
+
+#Timeline-row div {
+    margin: 4px auto 0;
+    margin-bottom: 7px;
+    position: absolute;
+    font-size: 60px;
+    height: 0px;
+    width: 0px;
+    color: rgb(0, 22, 66);
+
+}
+
+#Timeline-row a{
+    color: rgb(0, 128, 169);
+    z-index: 4;
+}
+
+#Timeline-row small a{
+    color: rgb(0, 128, 169);
+    z-index: 4;
+
+
+}
+
+.frame{
+    position: absolute;
+    width: 2700px;
+    height: 5500px;
+    font-family: sans-serif;
+    font-size: 40px;
+    left: 150px;
+    z-index: 1;
+
+}
+
+.frame h1 {
+    position: relative;
+    font-size: 250px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    color: rgb(127,255,255);
+}
+
+.frame h2 {
+    position: relative;
+    font-size: 150px;
+    text-align: center;
+    color: rgb(127,255,255);
+
+}
+
+.frame h3 {
+    position: relative;
+    font-size: 100px;
+    text-align: left;
+    margin-left: 100px;
+    margin-bottom: 50px;
+    color: rgb(127,255,255);
+}
+
+.frame h4 {
+    position: relative;
+    font-size: 100px;
+    text-align: left;
+    margin-left: 100px;
+    margin-bottom: 50px;
+    color: rgb(127,255,255);
+}
+/*
+.frame img {
+    float: left;
+    width: 50%;
+    height: auto;
+    margin: 50px;
+}
+*/
+
+.frame_cont {
+    position: absolute;
+    width: 3000px;
+    height: 5500px;
+    font-family: sans-serif;
+    font-size: 40px;
+    background-color: rgba(0,0,0,0.90);
+    box-shadow: 0px 0px 20px rgba(0,255,255,0.5);
+    border: 0px solid rgba(127,255,255,0.25);
+    -webkit-transform: translateZ(0);
+    -webkit-background-size:100% 100%;
+    -webkit-animation: resize 1s ease-in 1; /*shorthands are better!*/
+    -webkit-transform: scale3d(100%, 100%, 1);
+    -webkit-backface-visibility: hidden;
+    -webkit-transform-style: preserve-3d;
+}
+
+.frame_cont:hover{
+
+    box-shadow: 0px 0px 20px rgba(0,255,255,0.75);
+    border: 50px solid rgba(127,255,255,0.75);
+    background-color: rgba(0,0,0,1);
+    -webkit-transform: translateZ(0);
+}
+
+
+@-webkit-keyframes resize {
+    0% { -webkit-transform: scale3d(0%, 0%, 1); }
+    90% { -webkit-transform: scale3d(100%, 100%, 1); }
+    95% { -webkit-transform: scale3d(95%, 95%, 1); }
+    100% { -webkit-transform: scale3d(100%, 100%, 1); }
+}
+
+.frame_left {
+    position: absolute;
+    width: 150px;
+    height: 5500px;
+    z-index: 3;
+    background-color: rgba(211, 255, 200, 0.9);
+}
+
+.frame_right {
+    position: absolute;
+    width: 150px;
+    left: 2851px;
+    height: 5500px;
+    z-index: 3;
+    background-color: rgba(211, 255, 200, 0.9);
+}
+
+.wiki_infobox img {
+    width: 100%;
+    height: auto;
+    margin: 0px;
+}
+
+.wiki_infobox {
+    width: 40%;
+    height: 60%;
+    font-size: 40px;
+    overflow: auto;
+    overflow-x: auto;
+    overflow-y: auto;
+}
+
+.wiki_caption{
+    position: absolute;
+    margin-bottom: 0px;
+    width: 40%;
+    float: inherit;
+    background-color: rgba(127,255,255, 0.5);
+
+}
+
+.wiki_map{
+
+    width: 5000px;
+    height: 5000px;
+    background-color: rgb(0, 0, 0);
+}
+
+.wiki_map:hover{
+
+    box-shadow: 0px 0px 20px rgba(0,255,255,0.75);
+    border: 50px solid rgba(127,255,255,0.75);
+    background-color: rgba(0,0,0,1);
+    -webkit-transform: translateZ(0);
+}
+
+.wiki_img_left img{
+
+    position: relative;
+    margin: 50px;
+    float: left;
+    border: 50px solid rgba(127,255,255, 0.5);
+}
+
+.wiki_img_right img{
+
+    position: relative;
+    margin-left: 50px;
+    margin-right: 0px;
+    margin-bottom: 50px;
+    margin-top: 0px;
+    padding-top: 0px;
+    float: right;
+    border: 50px solid rgba(127,255,255, 0.5);
+}
+
+.frame_cont a {
+    color: rgb(110,255,255);
+}
+
+.frame p {
+    position: relative;
+    font-size: 80px;
+    text-align: left;
+    margin: 50px;
+    color: rgb(255,255,255);
+
+}
+
+.frame table {
+
+    margin: 50px;
+    width: 33%;
+    float: right;
+    font-size: 60px;
+    text-align: center;
+    border-collapse: collapse;
+    color: rgba(255,255,255,1);
+}
+
+.frame td{
+
+    border: 10px solid rgb(206, 255, 206);
+
+}
+
+.frame tr{
+
+    border: 10px solid rgb(206, 255, 206);
+    vertical-align: text-top;
+}
+
+.frame div{
+    position: relative;
+
+    font-size: 80px;
+    border-collapse: collapse;
+    color: rgba(255,255,255,1);
+    width: 100%;
+}
+
+.frame ol{
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin: 50px;
+    text-align: left;
+    padding-left: 40px;
+    font-size: 40px;
+    color: rgba(255,255,255,0.75);
+}
+
+.frame ul{
+    position: relative;
+    text-align: center;
+    padding-left: 40px;
+    margin: 50px;
+    font-size: 40px;
+    text-align: left;
+    color: rgba(255,255,255,0.75);
+}

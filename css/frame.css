@@ -1,0 +1,283 @@
+
+/*Basic elements that are used to construct the frame element*/
+.frame{
+    position: absolute;
+    width: 2700px;
+    height: 92%;
+    font-family: sans-serif;
+    font-size: 50px;
+    left: 150px;
+    top: 300px;
+    z-index: 50;
+    overflow: auto;
+    background-color: rgb(0,0,0);
+
+}
+
+.frame div.wiki_infobox{
+    position: relative;
+    max-height: 4500px;
+    margin: 50px;
+    max-width: 50%;
+    float: right;
+    overflow: auto;
+    z-index: 10;
+}
+
+.frame div.wiki_infobox table.wiki_infobox{
+    resize: both;
+    font-size: 60px;
+
+}
+
+.frame div.wiki_infobox::-webkit-scrollbar {
+    position: relative;
+    width: 40px;
+    height: 100px;
+}
+.frame div.wiki_infobox::-webkit-scrollbar-button {
+    background: #00efff
+}
+
+.frame div.wiki_infobox::-webkit-scrollbar-track-piece {
+    background: #054056
+}
+.frame div.wiki_infobox::-webkit-scrollbar-thumb {
+    background: #00d8dc
+}​
+
+.frame h1 {
+    position: absolute;
+    overflow: visible;
+    font-size: 250px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 15;
+    color: rgb(127,255,255);
+}
+
+.frame h2 {
+    position: relative;
+    font-size: 150px;
+    text-align: center;
+    color: rgb(127,255,255);
+
+}
+
+.frame h3 {
+    position: relative;
+    font-size: 100px;
+    text-align: left;
+    margin-left: 100px;
+    margin-bottom: 50px;
+    color: rgb(127,255,255);
+}
+
+.frame h4 {
+    position: relative;
+    font-size: 80px;
+    text-align: left;
+    margin-left: 100px;
+    margin-bottom: 50px;
+    color: rgb(127,255,255);
+}
+
+.frame p {
+    position: relative;
+    font-size: 60px;
+    text-align: left;
+    margin: 50px;
+    color: rgb(255,255,255);
+
+}
+
+.frame table {
+    color: rgba(255,255,255,1);
+}
+
+
+.frame td{
+
+    border: 10px solid rgb(206, 255, 206);
+
+}
+
+.frame tr{
+
+    border: 10px solid rgb(206, 255, 206);
+    vertical-align: text-top;
+}
+.frame th{
+
+    padding-bottom: 120px;
+    font-size: 100px;
+}
+
+
+.frame div{
+    color: rgba(255,255,255,1);
+}
+
+.frame ol{
+    position: relative;
+    max-height: 4500px;
+    padding: 100px;
+    margin: 50px;
+    max-width: 100%;
+    overflow: auto;
+    z-index: 10;
+    color: rgba(255,255,255,0.75);
+}
+
+
+.frame ol::-webkit-scrollbar {
+    position: relative;
+    width: 40px;
+    height: 100px;
+}
+.frame ol::-webkit-scrollbar-button {
+    background: #00efff
+}
+
+.frame ol::-webkit-scrollbar-track-piece {
+    background: #054056
+}
+.frame ol::-webkit-scrollbar-thumb {
+    background: #00d8dc
+}​
+
+.frame ul{
+    position: relative;
+    max-height: 4500px;
+    text-align: center;
+    padding-left: 60px;
+    margin: 50px;
+    font-size: 60px;
+    color: rgba(255,255,255,0.75);
+}
+
+.frame a {
+    color: rgb(61, 248, 255);
+    font-size: 65px;
+}
+
+.frame .reflist{
+    margin-bottom: 50px;
+}
+
+/************************************************
+* Infobox
+************************************************/
+
+.wiki_infobox img {
+    width: 100%;
+    height: auto;
+    margin: 0px;
+}
+
+.wiki_infobox tr th td a{
+    background-color: rgb(0,0,0);
+    width: 100%;
+    height: 100%;
+    border-color: rgb(0,0,0);
+    outline-color: rgb(0,0,0);
+}
+
+
+#Timeline-row div {
+    margin: 4px auto 0;
+    margin-bottom: 7px;
+    position: absolute;
+    font-size: 60px;
+    color: rgb(0, 128, 169);
+
+}
+
+#Timeline-row a{
+    color: rgb(0, 128, 169);
+    z-index: 15;
+}
+
+#Timeline-row small a{
+    color: rgb(0, 128, 169);
+    z-index: 15;
+}
+
+h1{
+
+    position: relative;
+
+    font-size: 250px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto;
+
+    z-index: 15;
+    color: rgb(127,255,255);
+
+}
+/*********************************************************
+* Frame Image
+**********************************************************/
+
+
+.wiki_img_left{
+    position: relative;
+    margin: 50px;
+    font-size: 60px;
+    float: left;
+    border: 50px solid rgba(127,255,255, 0.5);
+    background-color: rgba(127,255,255, 0.5);
+    z-index: 1;
+}
+
+.wiki_img_right img{
+
+    float: right;
+    border: 50px solid rgba(127,255,255, 0.5);
+}
+
+.wiki_img_left img{
+    float: left;
+    border: 50px solid rgba(127,255,255, 0.5);
+
+}
+
+.wiki_img_right{
+    font-size: 60px;
+    position: relative;
+    margin: 50px;
+    float: right;
+    border: 50px solid rgba(127,255,255, 0.5);
+    background-color: rgba(127,255,255, 0.5);
+    z-index: 1;
+}
+
+.wiki_caption span{
+    clear: both;
+    display: block;
+    z-index: 10;
+}
+
+.wiki_caption p {
+    font-size: 80px;
+    margin: 30px;
+    width: 100%;
+    color: #ffffff;
+}
+
+.wiki_caption a {
+    font-size: 90px;
+    color: #ffffff;
+}
+
+.wiki_caption em {
+    color: #ffffff;
+    margin: 30px;
+    font-size: 90px;
+}
+
+
+
+

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<title>Internet View-Port</title>
+        <style>
+            @import "css/frame.css";
+            @import "css/frame_container.css";
+            @import "css/map.css";
+        </style>
+
+        <script src="libs/mootools-core-1.4.5-full-nocompat.js"></script>
+        <script src="libs/mootools-more-1.4.0.1.js"></script>
+        <script src="libs/Scrollable.js"></script>
+        <script src="libs/three.min.js"></script>
+        <script src="libs/tween.min.js"></script>
+        <script src="libs/CSS3DRenderer.js"></script>
+        <script src="libs/FirstPersonControls.js"></script>
+        <script src="libs/OrbitControls.js"></script>
+        <script src="libs/SlideControls.js"></script>
+
+        <script src="PageManager.js"></script>
+        <script src="MapNode.js"></script>
+        <script src="MapManager.js"></script>
+        <script src="AnimationManager.js"></script>
+        <script src="BrowserManager.js"></script>
+        <script src="FrameGroup.js"></script>
+        <script src="NWEventHandler.js"></script>
+        <script src="WikiElementsBuilder.js"></script>
+        <script src="WebContentManager.js"></script>
+
+	</head>
+	<body>
+
+        <div id="container"></div>
+        <div id="remote_html"></div>
+        <div id="size_test"></div>
+        <div id="pages"></div>
+        <div id="Room"></div>
+
+
+
+            <script>
+
+           /*START PAGE*/
+		   var startPage = "http://en.wikipedia.org/wiki/History_of_art";
+		   
+
+            //Variables for the cube map, tables, and controls
+            var geometry, material, mesh;
+			var particles, materials = [], parameters, i, h, color;
+            var camera;
+            var scene, renderer, renderer2;
+            var container, Room;
+            var controls = null;
+            var light, pointLight;
+            var objects = [];
+            var sides = [];
+            var time = Date.now();
+            var clock = new THREE.Clock();
+
+            var browserManager;
+
+
+
+            init();
+            init2();
+            animate();
+
+
+
+                //Sets up basic functionality
+                function init() {
+
+                    scene = new THREE.Scene();
+                    container = document.getElementById( 'container' );
+
+                    camera = new THREE.PerspectiveCamera( 26, window.innerWidth / window.innerHeight, 1, 100000 );
+                    camera.position.set( 0, 15, 0);
+                    camera.frustumCulled = false;
+
+                    //Render
+                    renderer = new THREE.CSS3DRenderer();
+                    renderer.setSize( window.innerWidth, window.innerHeight );
+                    renderer.domElement.style.position = 'absolute';
+                    document.getElementById( 'container' ).appendChild( renderer.domElement );
+
+                    browserManager = new BrowserManager(scene, camera, startPage);
+
+                    //EventListener
+
+                    window.addEventListener( 'resize', onWindowResize, false );
+                }
+
+            function init2() {
+
+
+                Room = document.getElementById( 'Room' );
+
+                scene.fog = new THREE.FogExp2( 0x000000, 0.00035 );
+
+                light = new THREE.DirectionalLight( 0xffffff );
+                light.position.set( 0, 0.5, 1 ).normalize();
+                scene.add( light );
+
+
+
+                // ground
+
+                var material = new THREE.MeshLambertMaterial( { color: 0x4CF2D6, wireframe: true, wireframeLinewidth: 10 } );
+
+                mesh = new THREE.Mesh( new THREE.PlaneGeometry( 1000, 1000, 100, 100 ), material );
+                mesh.position.y = 0;
+                mesh.rotation.x = - Math.PI / 2;
+                scene.add( mesh );
+
+
+
+				//stars
+                geometry = new THREE.Geometry();
+
+                for ( i = 0; i < 20000; i ++ ) {
+
+
+                    var vertex = new THREE.Vector3();
+                    vertex.x = Math.random() * 2000 - 1000;
+                    vertex.y = Math.random() * 2000 - 1000;
+                    vertex.z = Math.random() * 2000 - 1000;
+
+                    geometry.vertices.push( vertex );
+
+                }
+
+                parameters = [   [ [0.9, 1, 1], 1 ], [ [0.75, 1, 1], 1 ] ];
+
+                for ( i = 0; i < parameters.length; i ++ ) {
+
+                    size  = parameters[i][1];
+                    color = parameters[i][0];
+
+
+                    materials[i] = new THREE.ParticleBasicMaterial( { size: size } );
+                    // materials[i].color.setHSV( color[0], color[1], color[2] );
+                    materials[ i ].color.setHex( 0xCEFFFF );
+                    materials[ 0 ].color.setHex( 0x27EFF );
+
+
+                    particles = new THREE.ParticleSystem( geometry, materials[i] );
+
+                    particles.rotation.x = Math.random() * 6;
+                    particles.rotation.y = Math.random() * 6;
+                    particles.rotation.z = Math.random() * 6;
+
+                    scene.add( particles );
+
+                }
+
+                renderer2 = new THREE.WebGLRenderer( { clearColor: 0x000000, clearAlpha: 1, antialias: true } );
+                renderer2.setSize( window.innerWidth, window.innerHeight );
+
+
+                Room.appendChild( renderer2.domElement );
+
+                //
+
+                window.addEventListener( 'resize', onWindowResize, false );
+            }
+
+            function initializeControls() {
+                controls = new THREE.OrbitControls( camera, renderer.domElement );
+                controls.rotateSpeed = 1;
+                controls.center.set(camera.position.x + 1,
+                        camera.position.y, camera.position.z);
+                controls.userZoom = false;
+            }
+
+            function initializeSlideControls() {
+                controls = new THREE.SlideControls( browserManager.mapManager, renderer.domElement );
+                controls.slideSpeed = 20;
+                controls.userZoomSpeed = 2;
+                controls.center = camera.position;
+            }
+
+                //Resize the windows
+
+                function onWindowResize() {
+
+                    camera.aspect = window.innerWidth / window.innerHeight;
+
+                    camera.updateProjectionMatrix();
+
+                    renderer.setSize( window.innerWidth, window.innerHeight );
+                    // TODO: Added
+                    renderer2.setSize( window.innerWidth, window.innerHeight );
+
+                    render();
+                }
+
+                //Animation for the scene
+
+                function animate() {
+
+                    requestAnimationFrame( animate );
+
+                    TWEEN.update();
+
+                    render();
+                }
+
+                //Render the scene
+
+                function render() {
+                   // camera.lookAt(camera.target);
+
+                    var delta = clock.getDelta(),
+                            time = clock.getElapsedTime() * 5;
+					var time2 = Date.now() * 0.0000005;
+
+                    if (controls !== null) {
+                        controls.update();
+                    }
+
+                    renderer.render( scene, camera );
+                    renderer2.render(scene, camera);
+
+				for ( i = 0; i < scene.children.length; i ++ ) {
+
+                        var object = scene.children[ i ];
+
+                        if ( object instanceof THREE.ParticleSystem ) {
+
+                            object.rotation.y = time2 * ( i < 10 ? i + 1 : - ( i + 1 ) );
+
+                        }
+
+                    }
+
+
+
+
+                }
+
+
+
+            </script>
+    </body>
+</html>

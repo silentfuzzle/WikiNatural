@@ -1,0 +1,88 @@
+/*Map Element*/
+
+.wiki_map{
+
+    width: 5000px;
+    height: 3000px;
+    background-color: rgb(0, 0, 0);
+    border: 50px solid rgba(127,255,255,0.75);
+    -webkit-transform: translateZ(0);
+    -webkit-background-size:100% 100%;
+    -webkit-animation: resize 1s ease-in 1; /*shorthands are better!*/
+    -webkit-transform: scale3d(100%, 100%, 1);
+    -webkit-backface-visibility: hidden;
+    -webkit-transform-style: preserve-3d;
+
+}
+
+/*CSS3D rendering hack*/
+@-webkit-keyframes resize {
+    0% { -webkit-transform: scale3d(0%, 0%, 1); }
+    90% { -webkit-transform: scale3d(100%, 100%, 1); }
+    95% { -webkit-transform: scale3d(95%, 95%, 1); }
+    100% { -webkit-transform: scale3d(100%, 100%, 1); }
+}
+
+.wiki_map:hover{
+
+    border: 50px solid rgba(127,255,255,0.75);
+    -webkit-transform: translateZ(0);
+}
+
+.wiki_map h2 {
+    background-color: rgb(0, 0, 0);
+}
+
+
+.page_icon {
+    position: absolute;
+    width: 600px;
+    height: 600px;
+    border: 20px solid rgba(127,255,255,0.75);
+    z-index: 4;
+    background-color: #000000;
+
+}
+
+.page_icon:hover {
+    border: 20px solid rgba(68, 255, 84, 0.74);
+}
+
+.icon_header{
+    position: absolute;
+    text-align: center;
+    font-size: 100px;
+    width: inherit;
+    margin: 0px;
+    z-index: 10;
+    color: whitesmoke;
+
+}
+.icon_img1 {
+    position: absolute;
+    top: 130px;
+    left: 110px;
+    width: 400px;
+    height: auto;
+    z-index: 1;
+}
+
+.icon_img2 {
+    position: absolute;
+    top: 360px;
+    left: -150px;
+    width: 400px;
+    height: auto;
+    margin: 0px;
+    z-index: 2;
+}
+
+.icon_img3{
+    position: absolute;
+    top: 360px;
+    left: 400px;
+    width: 400px;
+    height: auto;
+    margin: 0px;
+    z-index: 3;
+}
