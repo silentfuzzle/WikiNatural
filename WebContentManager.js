@@ -113,7 +113,7 @@ var WebContentManager = new Class({
     URLtoYQL: function(url_input){
         "use strict";
 
-        var basic_string = 'http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22';
+        var basic_string = 'https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22';
         if(url_input.charAt(url_input.length-1) == '/')
         {
             url_input = url_input.slice(0,url_input.length-1);
