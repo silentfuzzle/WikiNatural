@@ -9,6 +9,5 @@ Send your addition requests, bug reports, questions, and comments to gatesmediab
 
 ## Known Issues
 
-* Panels and animations appear to be unresponsive on some Wikipedia pages.
 * Users can't set the starting page.
 * The map doesn't have arrows from one location to the next.

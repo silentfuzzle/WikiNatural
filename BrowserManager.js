@@ -25,8 +25,7 @@ var BrowserManager = new Class({
 
 
     /*Uses the page url as a key to retrieve different PageManager objects*/
-    siteDictionary: {},
-    FOVSettings: [],         // 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
+    siteDictionary: {},      // 0  1  2  3  4  5  6  7  8  9 10 11 12 13 14 15 16 17
     FOVCalculations: new Array(60,60,65,95,75,75,55,45,40,46,42,40,35,33,33,30,25,25),
 
     /*The main event handler object for the program*/
@@ -52,28 +51,17 @@ var BrowserManager = new Class({
     initialize: function(scene, camera, startURL){
 
         /*Initializes utility objects*/
-            this.eventHandler = new NWEventHandler(this);
-            this.webContentManager = new WebContentManager();
-            console.log("Event Check");
-            console.log(this.eventHandler.browserManager);
-
-        if(!scene)
-            console.log("Please include a scene.");
-        if(!camera)
-            console.log("Please include a camera.");
-		if(startURL)
-			this.startPage = startURL;
+        this.eventHandler = new NWEventHandler(this);
+        this.webContentManager = new WebContentManager();
+        this.animationManager = new AnimationManager();
+        this.mapManager = new MapManager(scene);
 
         this.currentScene = scene;
         this.currentCamera = camera;
 
-        this.animationManager = new AnimationManager();
-
-        /*Builds Map*/
-        this.initFOVArray();
-        this.mapManager = new MapManager(scene);
-
         /*Initializes the first page*/
+        if(startURL)
+            this.startPage = startURL;
         this.loadPage(this.startPage, scene, camera);
     },
 	
@@ -85,7 +73,6 @@ var BrowserManager = new Class({
 	* @param {THREE.camera} camera A Three.js camera.
 	*/
     loadPage: function(url, scene, camera){
-        console.log("load page");
 
         /*Check if the page has already been loaded. Otherwise load the page.*/
         if(this.siteDictionary[url]){
@@ -127,9 +114,7 @@ var BrowserManager = new Class({
 
             this.animationManager.calculateFramePositions(page.groupList);
             this.activatePage(page, scene, camera);
-
         }
-
     },
 
 	/**
@@ -137,89 +122,65 @@ var BrowserManager = new Class({
 	* @description Displays the information in a PageManager object
 	* @param {PageManager} page The PageManager that holds the info. 
 	* @param {THREE.scene} scene A Three.js scene.
-	* @param {THREE.camera} camera A Three.js camera.
 	*/
-    activatePage: function(page, scene, camera){
-        console.log("activate page");
+    activatePage: function(page, scene){
 
         /*Removes current page*/
         if(this.activePage && this.activePage !== page){
              this.deactivatePage(this.activePage, scene);
         }
+
         /*Displays new page*/
         page.addFramesToScene(scene);
-
-        this.adjustCamera(camera, page.groupList.length);
         this.activePage = page;
 
-        // TODO: Added
         // Change the map position so that users begin facing this page's node
         var mapNode = this.mapManager.rootNode.findIcon(page.pageIcon);
         this.mapManager.setCurrPosition(mapNode);
 
+        // Change the camera's FOV so that the panels don't disappear
+        var index = page.groupList.length;
+        if (index >= this.FOVCalculations.length)
+            index = this.FOVCalculations.length - 1;
+        this.currentCamera.fov = this.FOVCalculations[index];
+
+        // Make sure the web page controls are initialized
         initializeControls();
     },
+
 	/**
 	* @author Adam McManigal
 	* @description Deactivates all frames belonging to the page manager
-	* @param {PageManager} page The PageManager to deactivate. 
+	* @param {PageManager} page The PageManager to deactivate.
 	* @param {THREE.scene} scene A Three.js scene.
 	*/
     deactivatePage: function(page, scene){
 
         /*Removes the CSS3DObjects from the scene*/
         page.removeFramesFromScene(scene);
-
     },
+
 	/**
 	* @author Adam McManigal & Emily Palmieri
-	* @description Displays the map.
+	* @description Displays or hides the map.
 	*/
-    /*Displays the map object*/
     displayMap: function(){
+
         if(this.mapDisplayed){
-            this.mapManager.deactivateMap(this.scene);
+
+            // Hide the map and display the active web page
+            this.mapManager.deactivateMap();
             this.activatePage(this.activePage, this.currentScene, this.currentCamera)
             this.mapDisplayed = false;
         }
         else{
+
+            // Display the map and hide the active web page
             this.mapManager.activateMap(this.scene);
-
-
-            //TODO: Make this use the adjustCamera function.
             this.currentCamera.fov = 60;
-            this.deactivatePage(this.activePage, this.currentScene);
             this.mapManager.setPositionVec(this.animationManager);
+            this.deactivatePage(this.activePage, this.currentScene);
             this.mapDisplayed = true;
         }
-    },
-	
-	/**
-	* @author: Heather Shadoan
-	* @description Initialize the fields of view
-	*/
-    initFOVArray: function(){
-	
-        this.FOVSettings[0] = 60;
-        for(var frames = 1; frames < this.FOVCalculations.length; frames++)
-        {
-            var setFov = this.FOVCalculations[frames];
-            this.FOVSettings[frames] = setFov ;
-        }
-
-    },
-	/**
-	* @author: Heather Shadoan
-	* @description Sets the camera field of view to match the number of frames in the scene 
-	* @param {THREE.scene} scene A Three.js scene.
-	* @param {Number} numOfFrames The number of frames in the scene.
-	*/
-    adjustCamera: function(camera, numOfFrames){
-
-        camera.fov = this.FOVSettings[numOfFrames];
-
-
     }
-
-
 });
