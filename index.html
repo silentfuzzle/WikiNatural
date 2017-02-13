@@ -30,95 +30,56 @@
 	</head>
 	<body>
 
-        <div id="container"></div>
-        <div id="remote_html"></div>
-        <div id="size_test"></div>
-        <div id="pages"></div>
-        <div id="Room"></div>
+        <div id="container"></div> <!-- Contains the panels -->
+        <div id="Room"></div> <!-- Contains the surrounding area -->
+        <div id="remote_html"></div> <!-- Used by mootools -->
+        <div id="pages"></div> <!-- Used to properly display panels -->
 
-
-
-            <script>
+        <script>
 
            /*START PAGE*/
 		   var startPage = "http://en.wikipedia.org/wiki/History_of_art";
-		   
 
             //Variables for the cube map, tables, and controls
-            var geometry, material, mesh;
-			var particles, materials = [], parameters, i, h, color;
-            var camera;
-            var scene, renderer, renderer2;
-            var container, Room;
+            var camera, scene, renderer, renderer2;
             var controls = null;
-            var light, pointLight;
-            var objects = [];
-            var sides = [];
-            var time = Date.now();
             var clock = new THREE.Clock();
-
             var browserManager;
 
 
 
             init();
-            init2();
             animate();
 
 
 
-                //Sets up basic functionality
-                function init() {
+           /**
+            * @description Initialize the 3D web browser
+            */
+            function init() {
 
-                    scene = new THREE.Scene();
-                    container = document.getElementById( 'container' );
-
-                    camera = new THREE.PerspectiveCamera( 26, window.innerWidth / window.innerHeight, 1, 100000 );
-                    camera.position.set( 0, 15, 0);
-                    camera.frustumCulled = false;
-
-                    //Render
-                    renderer = new THREE.CSS3DRenderer();
-                    renderer.setSize( window.innerWidth, window.innerHeight );
-                    renderer.domElement.style.position = 'absolute';
-                    document.getElementById( 'container' ).appendChild( renderer.domElement );
-
-                    browserManager = new BrowserManager(scene, camera, startPage);
-
-                    //EventListener
-
-                    window.addEventListener( 'resize', onWindowResize, false );
-                }
-
-            function init2() {
-
-
-                Room = document.getElementById( 'Room' );
-
+                // Create the scene
+                scene = new THREE.Scene();
                 scene.fog = new THREE.FogExp2( 0x000000, 0.00035 );
 
-                light = new THREE.DirectionalLight( 0xffffff );
+                // Create a light
+                var light = new THREE.DirectionalLight( 0xffffff );
                 light.position.set( 0, 0.5, 1 ).normalize();
                 scene.add( light );
 
-
-
-                // ground
-
+                // Create the ground
                 var material = new THREE.MeshLambertMaterial( { color: 0x4CF2D6, wireframe: true, wireframeLinewidth: 10 } );
 
-                mesh = new THREE.Mesh( new THREE.PlaneGeometry( 1000, 1000, 100, 100 ), material );
+                var mesh = new THREE.Mesh( new THREE.PlaneGeometry( 1000, 1000, 100, 100 ), material );
                 mesh.position.y = 0;
                 mesh.rotation.x = - Math.PI / 2;
                 scene.add( mesh );
 
+                // Create the stars
 
-
-				//stars
-                geometry = new THREE.Geometry();
-
-                for ( i = 0; i < 20000; i ++ ) {
-
+                // Create a random position for 20000 stars
+                var geometry = new THREE.Geometry();
+                for (var i = 0; i < 20000; i ++ ) {
 
                     var vertex = new THREE.Vector3();
                     vertex.x = Math.random() * 2000 - 1000;
@@ -126,44 +87,53 @@
                     vertex.z = Math.random() * 2000 - 1000;
 
                     geometry.vertices.push( vertex );
-
                 }
 
-                parameters = [   [ [0.9, 1, 1], 1 ], [ [0.75, 1, 1], 1 ] ];
+                // Create a field of blue stars and a field of white stars
+                var size = 1;
+                var materials = [];
+                materials[0] = new THREE.ParticleBasicMaterial( { size: size } );
+                materials[0].color.setHex( 0x27EFF );
+                materials[1] = new THREE.ParticleBasicMaterial( { size: size } );
+                materials[1].color.setHex( 0xCEFFFF );
 
-                for ( i = 0; i < parameters.length; i ++ ) {
-
-                    size  = parameters[i][1];
-                    color = parameters[i][0];
-
-
-                    materials[i] = new THREE.ParticleBasicMaterial( { size: size } );
-                    // materials[i].color.setHSV( color[0], color[1], color[2] );
-                    materials[ i ].color.setHex( 0xCEFFFF );
-                    materials[ 0 ].color.setHex( 0x27EFF );
-
+                var particles;
+                for (i = 0; i < materials.length; i ++ ) {
 
                     particles = new THREE.ParticleSystem( geometry, materials[i] );
-
                     particles.rotation.x = Math.random() * 6;
                     particles.rotation.y = Math.random() * 6;
                     particles.rotation.z = Math.random() * 6;
 
                     scene.add( particles );
-
                 }
 
+                // Create the camera
+                camera = new THREE.PerspectiveCamera( 26, window.innerWidth / window.innerHeight, 1, 100000 );
+                camera.position.set( 0, 15, 0);
+                camera.frustumCulled = false;
+
+                //Renderer for the panels
+                renderer = new THREE.CSS3DRenderer();
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.domElement.style.position = 'absolute';
+                document.getElementById( 'container' ).appendChild( renderer.domElement );
+
+                // Renderer for the surrounding space
                 renderer2 = new THREE.WebGLRenderer( { clearColor: 0x000000, clearAlpha: 1, antialias: true } );
                 renderer2.setSize( window.innerWidth, window.innerHeight );
+                document.getElementById( 'Room' ).appendChild( renderer2.domElement );
 
+                // Give control of the scene and camera to the 3D web browser controller
+                browserManager = new BrowserManager(scene, camera, startPage);
 
-                Room.appendChild( renderer2.domElement );
-
-                //
-
+                // Listen for the user resizing their web browser
                 window.addEventListener( 'resize', onWindowResize, false );
             }
 
+           /**
+            * @description Initialize the browser controls
+            */
             function initializeControls() {
                 controls = new THREE.OrbitControls( camera, renderer.domElement );
                 controls.rotateSpeed = 1;
@@ -172,6 +142,9 @@
                 controls.userZoom = false;
             }
 
+           /**
+            * @description Initialize the map controls
+            */
             function initializeSlideControls() {
                 controls = new THREE.SlideControls( browserManager.mapManager, renderer.domElement );
                 controls.slideSpeed = 20;
@@ -179,67 +152,58 @@
                 controls.center = camera.position;
             }
 
-                //Resize the windows
+           /**
+            * @description Resize the application based on the new size of the user's web browser
+            */
+            function onWindowResize() {
 
-                function onWindowResize() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
 
-                    camera.aspect = window.innerWidth / window.innerHeight;
+                renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer2.setSize( window.innerWidth, window.innerHeight );
 
-                    camera.updateProjectionMatrix();
+                render();
+            }
 
-                    renderer.setSize( window.innerWidth, window.innerHeight );
-                    // TODO: Added
-                    renderer2.setSize( window.innerWidth, window.innerHeight );
+           /**
+            * @description Animate the scene
+            */
+            function animate() {
 
-                    render();
+                requestAnimationFrame( animate );
+
+                TWEEN.update();
+
+                render();
+            }
+
+           /**
+            * @description Render the scene
+            */
+            function render() {
+                var delta = clock.getDelta(),
+                    time = Date.now() * 0.0000005;
+
+                if (controls !== null) {
+                    controls.update();
                 }
 
-                //Animation for the scene
+                renderer.render( scene, camera );
+                renderer2.render(scene, camera);
 
-                function animate() {
+               // Move the stars
+                for (var i = 0; i < scene.children.length; i ++ ) {
 
-                    requestAnimationFrame( animate );
+                    var object = scene.children[ i ];
 
-                    TWEEN.update();
+                    if ( object instanceof THREE.ParticleSystem ) {
 
-                    render();
-                }
-
-                //Render the scene
-
-                function render() {
-                   // camera.lookAt(camera.target);
-
-                    var delta = clock.getDelta(),
-                            time = clock.getElapsedTime() * 5;
-					var time2 = Date.now() * 0.0000005;
-
-                    if (controls !== null) {
-                        controls.update();
+                        object.rotation.y = time * ( i < 10 ? i + 1 : - ( i + 1 ) );
                     }
-
-                    renderer.render( scene, camera );
-                    renderer2.render(scene, camera);
-
-				for ( i = 0; i < scene.children.length; i ++ ) {
-
-                        var object = scene.children[ i ];
-
-                        if ( object instanceof THREE.ParticleSystem ) {
-
-                            object.rotation.y = time2 * ( i < 10 ? i + 1 : - ( i + 1 ) );
-
-                        }
-
-                    }
-
-
-
-
                 }
+            }
 
-
-
-            </script>
+        </script>
     </body>
 </html>
