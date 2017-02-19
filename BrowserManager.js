@@ -62,22 +62,20 @@ var BrowserManager = new Class({
         /*Initializes the first page*/
         if(startURL)
             this.startPage = startURL;
-        this.loadPage(this.startPage, scene, camera);
+        this.loadPage(this.startPage);
     },
 	
 	/**
 	* @author Adam McManigal
 	* @description Loads a page and displays it in a scene
-	* @param {string} url The Wikipedia page to load. 
-	* @param {THREE.scene} scene A Three.js scene.
-	* @param {THREE.camera} camera A Three.js camera.
+	* @param {string} url The Wikipedia page to load.
 	*/
-    loadPage: function(url, scene, camera){
+    loadPage: function(url){
 
         /*Check if the page has already been loaded. Otherwise load the page.*/
         if(this.siteDictionary[url]){
 
-            this.activatePage(this.siteDictionary[url], scene, camera);
+            this.activatePage(this.siteDictionary[url]);
         }
         else{
 
@@ -85,23 +83,21 @@ var BrowserManager = new Class({
             var page = new PageManager(this.eventHandler);
             this.siteDictionary[url] = page;
             this.webContentManager.getHTML(url, page);
-            this.waitForLoad(page, scene, camera, this);
+            this.waitForLoad(page, this);
         }
     },
 
 	/**
 	* @author Adam McManigal
 	* @description Ensure that a page has been loaded before it is displayed
-	* @param {PageManager} page The PageManager that holds the info. 
-	* @param {THREE.scene} scene A Three.js scene.
-	* @param {THREE.camera} camera A Three.js camera.
+	* @param {PageManager} page The PageManager that holds the info.
 	* @param {function} callback The method to call when the page has loaded.
 	*/
-    waitForLoad: function(page, scene, camera, callback){
+    waitForLoad: function(page, callback){
 
         if(!page.allGroupsCreated){
             setTimeout(function(){
-                callback.waitForLoad(page, scene, camera, callback);
+                callback.waitForLoad(page, callback);
             }, 500);
         }
         else{
@@ -113,25 +109,24 @@ var BrowserManager = new Class({
             }
 
             this.animationManager.calculateFramePositions(page.groupList);
-            this.activatePage(page, scene, camera);
+            this.activatePage(page);
         }
     },
 
 	/**
 	* @author Adam McManigal & Emily Palmieri
 	* @description Displays the information in a PageManager object
-	* @param {PageManager} page The PageManager that holds the info. 
-	* @param {THREE.scene} scene A Three.js scene.
+	* @param {PageManager} page The PageManager that holds the info.
 	*/
-    activatePage: function(page, scene){
+    activatePage: function(page){
 
         /*Removes current page*/
         if(this.activePage && this.activePage !== page){
-             this.deactivatePage(this.activePage, scene);
+             this.deactivatePage(this.activePage);
         }
 
         /*Displays new page*/
-        page.addFramesToScene(scene);
+        page.addFramesToScene(this.currentScene);
         this.activePage = page;
 
         // Change the map position so that users begin facing this page's node
@@ -152,12 +147,11 @@ var BrowserManager = new Class({
 	* @author Adam McManigal
 	* @description Deactivates all frames belonging to the page manager
 	* @param {PageManager} page The PageManager to deactivate.
-	* @param {THREE.scene} scene A Three.js scene.
 	*/
-    deactivatePage: function(page, scene){
+    deactivatePage: function(page){
 
         /*Removes the CSS3DObjects from the scene*/
-        page.removeFramesFromScene(scene);
+        page.removeFramesFromScene(this.currentScene);
     },
 
 	/**
@@ -170,7 +164,7 @@ var BrowserManager = new Class({
 
             // Hide the map and display the active web page
             this.mapManager.deactivateMap();
-            this.activatePage(this.activePage, this.currentScene, this.currentCamera)
+            this.activatePage(this.activePage);
             this.mapDisplayed = false;
         }
         else{
@@ -179,7 +173,7 @@ var BrowserManager = new Class({
             this.mapManager.activateMap(this.scene);
             this.currentCamera.fov = 60;
             this.mapManager.setPositionVec(this.animationManager);
-            this.deactivatePage(this.activePage, this.currentScene);
+            this.deactivatePage(this.activePage);
             this.mapDisplayed = true;
         }
     }
