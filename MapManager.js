@@ -18,9 +18,6 @@ var MapManager = new Class({
     currXPosition: 0,
     currYPosition: 0,
     position: undefined,
-    rotation: undefined,
-    up: undefined,
-    scale: undefined,
 
     iconMap: undefined,
     css3DMap: undefined,
@@ -38,15 +35,12 @@ var MapManager = new Class({
 
         });
 
-        this.up = new THREE.Vector3(0 , 1, 0);
-        this.scale = new THREE.Vector3(2, 2, 2);
-
         this.css3DMap = new THREE.CSS3DSprite(this.iconMap);
-        this.css3DMap.up = this.up;
-        this.css3DMap.scale = this.scale;
+        this.css3DMap.up = new THREE.Vector3(0 , 1, 0);
+        this.css3DMap.scale = new THREE.Vector3(1, 1, 1);
 
         scene.add(this.css3DMap);
-        this.deactivateMap(scene);
+        this.deactivateMap();
     },
 
     /** Set the map's position and face it at the user
@@ -174,6 +168,21 @@ var MapManager = new Class({
         element.inject(this.iconMap);
     },
 
+    /** Positions nodes in a tree structure, branching right and down
+     * @param {MapNode} pNode - The root/parent of the current branch
+     */
+    setPositions: function (pNode) {
+        var numNodes = pNode.children.length;
+        var currYPos = pNode.yPos;
+
+        for (var i = 0; i < numNodes; i++) {
+            var child = pNode.children[i];
+            child.yPos = currYPos;
+            currYPos += child.getDiameter() + pNode.spacing;
+            child.xPos = pNode.xPos + pNode.nodeChildDist;
+        }
+    },
+
     /** Displays the map
      */
     activateMap: function(){
@@ -188,20 +197,5 @@ var MapManager = new Class({
 
         this.css3DMap.element.style.display = "none";
         this.css3DMap.visible = false;
-    },
-
-    /** Positions nodes in a tree structure, branching right and down
-     * @param {MapNode} pNode - The root/parent of the current branch
-     */
-    setPositions: function (pNode) {
-        var numNodes = pNode.children.length;
-        var currYPos = pNode.yPos;
-
-        for (var i = 0; i < numNodes; i++) {
-            var child = pNode.children[i];
-            child.yPos = currYPos;
-            currYPos += child.getDiameter() + pNode.spacing;
-            child.xPos = pNode.xPos + pNode.nodeChildDist;
-        }
     }
 });
