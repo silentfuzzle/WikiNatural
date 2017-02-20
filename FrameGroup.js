@@ -149,7 +149,7 @@ var FrameGroup = new Class({
      */
     displayCurrentFrame: function(scene, scale){
 
-        /*Makes current CSS3D object invisible*/
+        /*Makes current CSS3D object visible*/
         this.CSS3DObjectList[this.currentFrame].element.style.display = "";
         this.CSS3DObjectList[this.currentFrame].visible = true;
 

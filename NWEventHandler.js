@@ -32,7 +32,7 @@ var NWEventHandler = new Class({
         else if(wikiCheck > 0)
         {
             newURL = newURL.replace(/^.*?(?=wiki)/, 'http://en.wikipedia.org/');
-            browserManager.loadPage(newURL, scene, camera);
+            browserManager.loadPage(newURL);
         }
         else{
             window.open(this.href);

@@ -63,7 +63,6 @@ var PageManager = new Class({
 	/** 
 	 * @author: Adam McManigal
      * @description Builds the elements for the CSS3D frames
-	 * @param {NWEventHandler} eventHandle The object containing needed event handling methods.
 	 */
     generateFrameGroups: function(){
 
@@ -160,7 +159,7 @@ var PageManager = new Class({
         this.numberOfGroups++;
         this.swapCurrentFrame();
 
-        for(i = 0; i < this.currentGroup.length; i++)
+        for(var i = 0; i < this.currentGroup.length; i++)
         {
             this.currentGroup[i].frustumCulled = false;
         }
@@ -356,7 +355,7 @@ var PageManager = new Class({
 	/** 
 	 * @author Emily Palmieri
      * @description Searches for any frames that were previously in focus and shouldn't be.
-	 * @param {FrameGroup} newFocusFrame The frame that should be in focus.
+	 * @param {Number} newFocusFrame The frame that should be in focus.
 	 */
     unfocusPrevFrame: function(newFocusFrame) {
         for (var i=0; i < this.groupList.length; i++) {
@@ -369,23 +368,20 @@ var PageManager = new Class({
 	/** 
 	 * @author Adam McManigal
      * @description Adds the current frame of all the FrameGroups to the scene.
-	 * @param {THREE.scene} scene The THREE.js scene to add the frame to.
+	 * @param {THREE.Scene} scene The THREE.js scene to add the frame to.
 	 */
     addFramesToScene: function(scene){
         for(var i = 0; i < this.groupList.length; i++){
-            console.log("Added Frame to Scene");
-            var temp = this.groupList[i].displayCurrentFrame(scene, this.frameScale);
+            this.groupList[i].displayCurrentFrame(scene, this.frameScale);
         }
-
     },
 
 	/** 
 	 * @author Adam McManigal
      * @description Removes the current frame of all the FrameGroups to the scene.
-	 * @param {THREE.scene} scene The THREE.js scene to add the frame to.
 	 */
     /*Make all visible frames invisible*/
-    removeFramesFromScene: function(scene){
+    removeFramesFromScene: function(){
 
         for(var i = 0; i < this.groupList.length; i++){
 
@@ -419,36 +415,22 @@ var PageManager = new Class({
         isInfobox:function(element){
 
             var name = element.className;
-            if(name === 'wiki_infobox'){
-                return true;
-            }
-            else{
-                return false;
-            }
+            return (name === 'wiki_infobox');
         },
 
 		isReflist: function(element){
             var name = element.className;
-            if(name === 'wiki_reflist'){
-                return true;
-            }
-            return false;
+            return (name === 'wiki_reflist');
         },
 
         isHeader: function(element){
             var name = element.localName;
-            if(name === 'h3' || name === 'h4'){
-                return true;
-            }
-            return false;
+            return (name === 'h3' || name === 'h4');
         },
 
         isH2Header: function(element){
             var name = element.localName;
-            if(name === 'h2')
-                return true;
-            else
-                return false;
+            return (name === 'h2');
         }
 
     });
