@@ -48,7 +48,7 @@ var PageManager = new Class({
 	
 	/** 
 	 * @author: Adam McManigal
-     * @description Retrieves HTML using the Yahoo Query Language service
+     * @description Builds the page frames from the found html elements
 	 * @param {NWEventHandler} eventHandle The object containing needed event handling methods.
 	 * @constructor
 	 */

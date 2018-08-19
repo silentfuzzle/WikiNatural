@@ -31,7 +31,7 @@ var NWEventHandler = new Class({
         if(citCheck > 0) {}
         else if(wikiCheck > 0)
         {
-            newURL = newURL.replace(/^.*?(?=wiki)/, 'http://en.wikipedia.org/');
+            newURL = 'http://en.wikipedia.org/' + newURL.substring(wikiCheck);
             browserManager.loadPage(newURL);
         }
         else{

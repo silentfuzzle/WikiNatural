@@ -63,9 +63,8 @@ var WikiElementsBuilder = new Class({
         * how many elements have been processed so that we know when all the
         * operations have been completed.*/
 
-         var mainContentEl = $$(this.wikiContentName).getChildren()[0];
+         var mainContentEl = $$(this.wikiContentName).getChildren()[0].getChildren()[0];
         this.wikiElementCount = mainContentEl.length + 1;// +1 for header
-        console.log(mainContentEl);
 
         /*Process all the child elements*/
         for(var i = 0; i < mainContentEl.length; i++){
@@ -397,8 +396,6 @@ var WikiElementsBuilder = new Class({
         var oldImage = element.getElements('img')[0];
         if(oldImage){
             this.fixImageSRC(oldImage);
-            console.log(oldImage.width);
-            console.log(oldImage.height);
         }
         else{
             return;

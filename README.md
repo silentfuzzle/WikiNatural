@@ -3,9 +3,9 @@ WikiNatural, the brain child of Adam McManigal, retrieves Wikipedia pages and di
 
 This was my capstone project as an undergraduate Computer Science student. I co-developed it with Adam McManigal, Heather Shadoan, and Kyle Doyle at the University of Montana in 2013. At the time, we called it Natural Web, but it seems that name is quite common, so I'm renaming it here. Primarily, I worked on the map layout, panel layout, user interface controls, and animations.
 
-You can find WikiNatural live [here](https://silentfuzzle.github.io/WikiNatural/). WikiNatural works best in Google Chrome.
+You can find WikiNatural live [here](http://wikinatural.opengatesmedia.com/). WikiNatural works best in Google Chrome.
 
-Send your addition requests, bug reports, questions, and comments to gatesmediablog (at) gmail (dot) com.
+You can send requests, bug reports, questions, comments, etc. via my website [here](https://opengatesmedia.com/about/contact-me/).
 
 ## Controls
 
@@ -24,3 +24,4 @@ WikiNatural's map, as opened with the Map button found at the top of any panel, 
 * Users can't set the starting page.
 * The map doesn't have arrows from one location to the next.
 * Panels have a tendency to flicker or disappear.
+* Information doesn't always span the entirety of a frame.

@@ -1,21 +1,21 @@
 /**
  * @author Adam McManigal & Kyle Doyle
  * @class Retrieves HTML from the internet and loads it into the DOM.
- * @default If a different method for retrieving Wiki HTML is not defined YQL is used.
+ * @default If a different method for retrieving Wiki HTML is not defined, use default.
  */
 var WebContentManager = new Class({
 
     webRequestApproach: undefined,
     elementsBuilder: undefined,
 
-    /*If a handler is not defined, use the default YQLHTMLRequest*/
+    /*If a handler is not defined, use default*/
     initialize: function(webRequestApproach){
         "use strict";
         if(!webRequestApproach){
-            this.webRequestApproach = this.getYQLHTMLRequest;
+            this.webRequestApproach = this.getPHPHTMLRequest;
         }
             /*TODO: Consider adding support for another HTML get method (like CURL)*/
-            this.webRequestApproach = this.getYQLHTMLRequest;
+            this.webRequestApproach = this.getPHPHTMLRequest;
             this.elementsBuilder = new WikiElementsBuilder();
 
     },
@@ -31,6 +31,49 @@ var WebContentManager = new Class({
         this.webRequestApproach(url, pageManager, this);
 
     },
+	
+    /** 
+	 * @author: Emily Palmieri
+     * @description: Retrieves html using a PHP script.
+	 * @param {string} plain_url An HTTP URL to a Wikipedia page.
+	 * @param {PageManager} pageManager A PageManager object to store processed HTML in. 
+	 * @param {function} caller Callback that begins processing once the HTML has been retrieved
+	 */
+	getPHPHTMLRequest: function(plain_url, pageManager, caller){
+        "use strict"
+		
+		var xhr = new XMLHttpRequest();
+		xhr.open('GET', 'php/wiki_retriever.php?url=' + encodeURIComponent(plain_url));
+
+		// Track the state changes of the request.
+		xhr.onreadystatechange = function () {
+			var DONE = 4; // readyState 4 means the request is done.
+			var OK = 200; // status 200 is a successful return.
+			if (xhr.readyState === DONE) {
+				if (xhr.status === OK) {
+					var tempElement = new Element('div', {
+						'id': 'temp_html',
+						'class': 'web_content_util',
+						'html': xhr.responseText
+					});
+
+					/*Injects the html into a special area of the DOM to ensure that nothing in our
+					 * program is overwritten*/
+					tempElement.inject('remote_html');
+					
+                    /*Configures the current PageContentManager*/
+                    if(caller)
+                        caller.finishElements(plain_url, pageManager);
+					
+				} else {
+					console.log('Error: ' + xhr.status); // An error occurred during the request.
+				}
+			}
+		};
+
+		// Send the request to send-ajax-data.php
+		xhr.send(null);
+	},
 
     /** 
 	 * @author: Adam McManigal

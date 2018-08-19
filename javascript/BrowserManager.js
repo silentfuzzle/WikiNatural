@@ -5,7 +5,7 @@
  * Manages all the pages the user has navigated. A cache, stores previously
  * visited pages in case the user returns and loading new pages that have not been visited. 
  * A global instance of it is used in the NWEventHandler.
- * @default If a different method for retrieving Wiki HTML is not defined YQL is used.
+ * @default If a different method for retrieving Wiki HTML is not defined, use default.
  */
 
 var BrowserManager = new Class({
